@@ -1,0 +1,69 @@
+name: Deploy
+
+on:
+  workflow_call:
+    inputs:
+      packageName:
+        description: 'Package Name'
+        type: string
+        required: true
+      track:
+        description: 'Release Track'
+        type: string
+        required: false
+        default: "internal"
+
+jobs:
+  build-aab:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: diareuse/actions/.github/actions/env@v1
+      - uses: diareuse/actions/.github/actions/version/version-code@v1
+        with:
+          packageName: ${{ inputs.packageName }}
+      - uses: diareuse/actions/.github/actions/version/version-name@v1
+      - uses: diareuse/actions/.github/actions/android@v1
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - run: ./gradlew bundleRelease --no-daemon
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-bundle
+          path: |
+            app/**/*.aab
+            app/**/mapping.txt
+          if-no-files-found: error
+
+  publish-mobile:
+    runs-on: ubuntu-latest
+    needs: [ build-aab ]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-bundle
+
+      - id: track
+        run: |
+          TARGET_TRACK=${{ github.event.inputs.track }}
+          WANTED_TRACK=$([ "${{ github.ref_type }}" == "branch" ] && echo "internal" || echo "production")
+          echo "track=${TARGET_TRACK:-${WANTED_TRACK}}" >> "$GITHUB_OUTPUT"
+
+      - uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJson: service-account.json
+          packageName: ${{ inputs.packageName }}
+          releaseFiles: build/outputs/bundle/release/*.aab
+          track: ${{ steps.track.outputs.track }}
+          status: completed
+          inAppUpdatePriority: 3
+          mappingFile: build/outputs/mapping/release/mapping.txt

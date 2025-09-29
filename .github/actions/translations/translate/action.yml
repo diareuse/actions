@@ -1,0 +1,42 @@
+name: Update translations
+description: Sets up next version code valid for this release
+inputs:
+  GEMINI_API_KEY:
+    required: true
+    description:
+  filePath:
+    required: true
+    description:
+  branch:
+    required: false
+    default: "chore/update-translations"
+    description:
+
+runs:
+  using: composite
+  steps:
+    - run: |
+        git config user.name 'Gemini[bot]'
+        git config user.email 'gemini@users.noreply.github.com'
+        git fetch origin master
+        git checkout -b ${{ inputs.branch }}
+
+    - uses: diareuse/actions/.github/actions/translations/gemini@v1
+      with:
+        filePath: ${{ inputs.filePath }}
+        geminiApiKey: ${{ secrets.GEMINI_API_KEY }}
+
+    - name: Create commit
+      run: |
+        git add -- *.xml
+        git commit -m "chore(strings): update translations"
+
+    - name: Push to remote
+      run: |
+        git push origin ${{ inputs.branch }}
+
+    - name: Create pull request
+      run: |
+        gh pr create --title "Update translations" --body "Updated translations as translated from Gemini LLM." --base master --head ${{ inputs.branch }}
+      env:
+        GH_TOKEN: ${{ github.token }}

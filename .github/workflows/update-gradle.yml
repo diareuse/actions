@@ -1,0 +1,20 @@
+name: Update gradle
+
+on:
+  workflow_call:
+
+#concurrency:
+#  group: ${{ github.workflow }}-${{ github.ref }}
+#  cancel-in-progress: true
+
+jobs:
+  update-gradle:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: diareuse/actions/.github/actions/android@v1
+
+      - name: Update Gradle Wrapper
+        uses: gradle-update/update-gradle-wrapper-action@v2
+        with:
+          commit-message-template: 'chore(gradle): Bump Gradle Wrapper from %sourceVersion% to %targetVersion%'

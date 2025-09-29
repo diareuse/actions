@@ -1,0 +1,21 @@
+name: Google Play version code
+description: Sets up next version code valid for this release
+inputs:
+  packageName:
+    required: false
+    description: "Package Name"
+runs:
+  using: composite
+  steps:
+
+    - uses: lukasa1993/android-version-code-update@v2.1.0
+      id: nextVersionCode
+      with:
+        serviceAccountJson: ./service-account.json
+        packageName: ${{ inputs.packageName }}
+
+    - shell: bash
+      run: |
+        versionNumber=${{steps.nextVersionCode.outputs.version}}
+        versionNumber=$(($versionNumber + 1))
+        echo "VERSION_CODE=$versionNumber" >> gradle.properties

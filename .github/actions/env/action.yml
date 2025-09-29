@@ -1,0 +1,9 @@
+name: Prepare Envs
+description: Prepares Envs
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      run: |
+        echo "GithubUsername=${{ github.actor }}" >> gradle.properties
+        echo "GithubPassword=${{ github.token }}" >> gradle.properties
