@@ -11,7 +11,7 @@ jobs:
   update-gradle:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: diareuse/actions/.github/actions/android@v1
 
       - name: Update Gradle Wrapper
