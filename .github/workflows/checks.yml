@@ -15,7 +15,7 @@ jobs:
       checks: write
       pull-requests: write
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - uses: diareuse/actions/.github/actions/env@v1
       - uses: diareuse/actions/.github/actions/android@v1
@@ -38,7 +38,7 @@ jobs:
       checks: write
       pull-requests: write
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - uses: diareuse/actions/.github/actions/env@v1
       - uses: diareuse/actions/.github/actions/android@v1
@@ -55,7 +55,7 @@ jobs:
       repository-projects: write
     if: github.actor == 'dependabot[bot]'
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Enable auto-merge for Dependabot PRs
         run: gh pr merge --rebase "$PR_URL"
         env:
