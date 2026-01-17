@@ -1,0 +1,23 @@
+name: Checks
+
+on:
+  workflow_call:
+    secrets:
+      AUTH_TOKEN:
+        required: true
+
+jobs:
+  merge:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      issues: write
+      repository-projects: write
+    if: github.actor == 'dependabot[bot]'
+    steps:
+      - uses: actions/checkout@v5
+      - name: Enable auto-merge for Dependabot PRs
+        run: gh pr merge --rebase "$PR_URL"
+        env:
+          GH_TOKEN: ${{secrets.AUTH_TOKEN}}
+          PR_URL: ${{github.event.pull_request.html_url}}
