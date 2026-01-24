@@ -15,7 +15,9 @@ jobs:
       repository-projects: write
     if: github.actor == 'dependabot[bot]'
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
+        with:
+          token: ${{secrets.AUTH_TOKEN}}
       - name: Enable auto-merge for Dependabot PRs
         run: gh pr merge --rebase "$PR_URL"
         env:
