@@ -12,6 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+        with:
+          token: ${{ secrets.AUTH_TOKEN }}
       - uses: diareuse/actions/.github/actions/android@v1
 
       - name: Update Gradle Wrapper

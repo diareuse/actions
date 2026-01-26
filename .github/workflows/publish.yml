@@ -18,6 +18,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+        with:
+          token: ${{ secrets.AUTH_TOKEN }}
 
       - uses: diareuse/actions/.github/actions/env@v1
       - uses: diareuse/actions/.github/actions/version/version-code@v1
@@ -47,6 +49,8 @@ jobs:
     needs: [ build-aab ]
     steps:
       - uses: actions/checkout@v6
+        with:
+          token: ${{ secrets.AUTH_TOKEN }}
 
       - uses: actions/download-artifact@v7
         with:
