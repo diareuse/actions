@@ -2,6 +2,9 @@ name: Checks
 
 on:
   workflow_call:
+    secrets:
+      AUTH_TOKEN:
+        required: true
 
 #concurrency:
 #  group: ${{ github.workflow }}-${{ github.ref }}
