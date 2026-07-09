@@ -21,7 +21,7 @@ jobs:
       - uses: actions/checkout@v6
         with:
           token: ${{ secrets.AUTH_TOKEN }}
-      - uses: googleapis/release-please-action@v4
+      - uses: googleapis/release-please-action@v5
         with:
           target-branch: ${{ github.ref_name }}
           token: ${{ secrets.AUTH_TOKEN }}
