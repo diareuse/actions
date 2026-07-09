@@ -14,7 +14,7 @@ jobs:
   update-gradle:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           token: ${{ secrets.AUTH_TOKEN }}
       - uses: diareuse/actions/.github/actions/android@v1
